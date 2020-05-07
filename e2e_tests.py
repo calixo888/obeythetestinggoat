@@ -15,9 +15,6 @@ class NewVisitorCase(unittest.TestCase):
         # Visitor checks the title to see the page
         self.assertIn("To-Do", self.browser.title)
 
-        # Throw error and stop test
-        self.fail("Finish the e2e test!")
-
 
 if __name__ == "__main__":
     unittest.main(warnings="ignore")
