@@ -1,19 +1,24 @@
 from django.test import TestCase
-from django.http import HttpRequest
 from django.urls import resolve
 from lists import views
 
 class HomePageTest(TestCase):
 
-    def test_root_url_is_home_page(self):
+    def test_root_url_is_index(self):
+        """
+        Check if the index page is accessed through the root URL
+        """
+
         root_page = resolve("/")
         self.assertEqual(root_page.func, views.index)
 
-    def test_home_page_has_correct_html(self):
-        http_request = HttpRequest()
-        response = views.index(http_request)
+
+    def test_index_has_correct_html(self):
+        """
+        Make sure that the index page renders the index.html template
+        """
+
+        response = self.client.get("/")
         html = response.content.decode('utf8')
 
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>To-Do lists</title>', html)
-        self.assertTrue(html.endswith('</html>'))  
+        self.assertTemplateUsed(response, "index.html")
