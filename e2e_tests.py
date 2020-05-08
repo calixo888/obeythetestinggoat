@@ -21,13 +21,7 @@ class NewVisitorCase(unittest.TestCase):
         )
 
         # Visitor is invited to create to-do item immediately
-        to_do_item_input = self.browser.find_element_by_id("#to-do-item-input")
-
-        # Testing input placeholder text
-        self.assertEqual(
-            to_do_item_input.get_attribute("placeholder"),
-            "Enter a to-do item"
-        )
+        to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
 
         # Typing in a new to-do item
         to_do_item_input.send_keys("Buy some milk")
