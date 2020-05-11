@@ -14,12 +14,6 @@ class NewVisitorCase(unittest.TestCase):
         # Start the browser
         self.browser.get('http://localhost:8000')
 
-        # Testing title content
-        self.assertIn(
-            "To-Do",
-            self.browser.title
-        )
-
         # Visitor is invited to create to-do item immediately
         to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
 

@@ -28,26 +28,6 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, "index.html")
 
 
-    def test_save_a_post_request(self):
-        """
-        Make sure that the application can save a POST request to database
-        """
-
-        # Make POST request to index
-        response = self.client.post("/", data={
-            "item-text": "A new list item"
-        })
-
-        # Check if data is returned from POST response
-        self.assertIn(
-            "A new list item",
-            response.content.decode()
-        )
-
-        # Make sure index.html template is rendered
-        self.assertTemplateUsed(response, "index.html")
-
-
 class ItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
@@ -72,3 +52,40 @@ class ItemModelTest(TestCase):
         # Test the 'text' field of each item
         self.assertEqual(first_item_object.text, "First List Item")
         self.assertEqual(second_item_object.text, "Second List Item")
+
+
+    def test_save_a_post_request(self):
+        """
+        Test that making a POST request will save Item object in database
+        """
+
+        test_item_text = "New list item"
+
+        # Make a POST request to server
+        response = self.client.post("/", data={
+            "item-text": test_item_text
+        })
+
+        # Test the amount of objects in DB is 1
+        self.assertEqual(models.Item.objects.count(), 1)
+
+        # Test if the (first) item is the item we submitted
+        first_item = models.Item.objects.first()
+        self.assertEqual(first_item.text, test_item_text)
+
+
+    def test_redirects_to_index_after_post(self):
+        """
+        Test that we redirect to index page after POST request
+        """
+
+        test_item_text = "New list item"
+
+        # Make a POST request to server
+        response = self.client.post("/", data={
+            "item-text": test_item_text
+        })
+
+        # Test the status code and URL location from HTML content
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("index.html")

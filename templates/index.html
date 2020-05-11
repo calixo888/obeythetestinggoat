@@ -18,15 +18,17 @@
         {% csrf_token %}
 
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" name="item-text" type="text" id="to-do-item-input" placeholder="Enter a to-do item">
+          <input class="mdl-textfield__input" name="item-text" type="text" id="to-do-item-input">
           <label class="mdl-textfield__label" for="to-do-item-input">Enter a to-do item</label>
         </div>
       </form>
 
       <table id="to-do-item-table">
-        <tr>
-          <td>{{ new_item_text }}</td>
-        </tr>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.text }}</td>
+          </tr>
+        {% endfor %}
       </table>
     </div>
   </body>
