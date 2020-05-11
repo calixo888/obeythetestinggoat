@@ -28,6 +28,23 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, "index.html")
 
 
+    def test_all_items_are_rendered_in_table(self):
+        """
+        Make sure that all items in database are being rendered in the table
+        """
+
+        # Create 2 items
+        models.Item.objects.create(text="Item 1")
+        models.Item.objects.create(text="Item 2")
+
+        # Make GET request to index page
+        response = self.client.get("/")
+
+        # Check if the items 1 and 2 are in response content
+        self.assertIn("Item 1", response.content.decode())
+        self.assertIn("Item 2", response.content.decode())
+
+
 class ItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
