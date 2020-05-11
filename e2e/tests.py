@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 import time
 
-class NewVisitorCase(unittest.TestCase):
+class NewVisitorCase(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
 
@@ -12,7 +13,7 @@ class NewVisitorCase(unittest.TestCase):
 
     def test_start_list_and_retrieve_later(self):
         # Start the browser
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # Visitor is invited to create to-do item immediately
         to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
