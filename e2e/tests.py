@@ -29,7 +29,6 @@ class NewVisitorCase(LiveServerTestCase):
         # Implicit wait and check for item to be rendered in table
         self.wait_for_item_rendered_in_table("Buy some milk")
 
-
     def wait_for_item_rendered_in_table(self, item_text):
         """
         Implicit wait function until item is rendered into table
@@ -52,7 +51,6 @@ class NewVisitorCase(LiveServerTestCase):
                     raise e
 
                 time.sleep(0.5)
-
 
     def test_user_can_start_list_at_unique_url(self):
         """

@@ -12,7 +12,6 @@ class HomePageTest(TestCase):
         root_page = resolve("/")
         self.assertEqual(root_page.func, views.index)
 
-
     def test_index_has_correct_html(self):
         """
         Make sure that the index page renders the index.html template
@@ -26,23 +25,6 @@ class HomePageTest(TestCase):
 
         # Make sure that the template rendered in index.html
         self.assertTemplateUsed(response, "index.html")
-
-
-    def test_all_items_are_rendered_in_table(self):
-        """
-        Make sure that all items in database are being rendered in the table
-        """
-
-        # Create 2 items
-        models.Item.objects.create(text="Item 1")
-        models.Item.objects.create(text="Item 2")
-
-        # Make GET request to index page
-        response = self.client.get("/")
-
-        # Check if the items 1 and 2 are in response content
-        self.assertIn("Item 1", response.content.decode())
-        self.assertIn("Item 2", response.content.decode())
 
 
 class ItemModelTest(TestCase):
@@ -71,16 +53,16 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_item_object.text, "Second List Item")
 
 
-    def test_save_a_post_request(self):
+class NewListTest(TestCase):
+
+    def test_save_a_POST_request(self):
         """
         Test that making a POST request will save Item object in database
         """
 
-        test_item_text = "New list item"
-
         # Make a POST request to server
         response = self.client.post("/", data={
-            "item-text": test_item_text
+            "item-text": "New list item"
         })
 
         # Test the amount of objects in DB is 1
@@ -88,21 +70,36 @@ class ItemModelTest(TestCase):
 
         # Test if the (first) item is the item we submitted
         first_item = models.Item.objects.first()
-        self.assertEqual(first_item.text, test_item_text)
+        self.assertEqual(first_item.text, "New list item")
 
-
-    def test_redirects_to_index_after_post(self):
+    def test_redirects_after_POST(self):
         """
-        Test that we redirect to index page after POST request
+        Test that we redirect to view-list page after POST request
         """
-
-        test_item_text = "New list item"
 
         # Make a POST request to server
         response = self.client.post("/", data={
-            "item-text": test_item_text
+            "item-text": "New list item"
         })
 
         # Test the status code and URL location from HTML content
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed("index.html")
+        self.assertRedirects(response, "/lists/new-list/") # Detect URL redirect
+
+
+class ListViewTest(TestCase):
+
+    def test_list_displays_all_items(self):
+        """
+        Make sure that list page displays all items
+        """
+
+        # Create 2 new items
+        models.Item.objects.create(text="Item 1")
+        models.Item.objects.create(text="Item 2")
+
+        # Get new-list page
+        response = self.client.get("/lists/new-list/")
+
+        # Check if page content includes 2 newly-created items
+        self.assertContains(response, "Item 1")
+        self.assertContains(response, "Item 2")
