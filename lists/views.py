@@ -6,8 +6,10 @@ def index(request):
     return render(request, "index.html")
 
 def new_list(request):
-    models.Item.objects.create(text=request.POST["item-text"])
-    return HttpResponseRedirect("/lists/new-list/")
+    item_list_name = request.POST["item-list-name"]
+    url_list_name = item_list_name.lower().replace(" ", "-")
+    models.ItemList.objects.create(url_name=url_list_name, name=item_list_name)
+    return HttpResponseRedirect(f"/lists/{item_list_name}/")
 
 def view_list(request):
     # Get all items and send them into context for table population
