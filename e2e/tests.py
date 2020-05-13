@@ -9,6 +9,7 @@ class NewVisitorCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
+        self.browser.implicitly_wait(5)
 
     def tearDown(self):
         self.browser.quit()
