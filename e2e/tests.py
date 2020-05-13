@@ -18,16 +18,16 @@ class NewVisitorCase(LiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         # Visitor is invited to create to-do item immediately
-        to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
+        item_list_input = self.browser.find_element_by_id("item-list-input")
 
         # Typing in a new to-do item
-        to_do_item_input.send_keys("Buy some milk")
+        item_list_input.send_keys("Sample List")
 
         # Creating new to-do item
-        to_do_item_input.send_keys(Keys.ENTER)
+        item_list_input.send_keys(Keys.ENTER)
 
-        # Implicit wait and check for item to be rendered in table
-        self.wait_for_item_rendered_in_table("Buy some milk")
+        # Check that new list at unique URL is generated
+        self.assertRegex(self.browser.current_url, "/lists/sample-list/")
 
     def wait_for_item_rendered_in_table(self, item_text):
         """
@@ -51,26 +51,6 @@ class NewVisitorCase(LiveServerTestCase):
                     raise e
 
                 time.sleep(0.5)
-
-    def test_user_can_start_list_at_unique_url(self):
-        """
-        Be able to create a unique URL for a new list
-        """
-
-        # Get index page
-        self.browser.get(self.live_server_url)
-
-        # Create a new list item
-        to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
-        to_do_item_input.send_keys("Eat some cats")
-        to_do_item_input.send_keys(Keys.ENTER)
-
-        # Check for new item in table
-        self.wait_for_item_rendered_in_table("Eat some cats")
-
-        # Check for newly generated URL for list
-        generated_list_url = self.browser.current_url
-        self.assertRegex(generated_list_url, "/lists/.+") # Check the regex
 
 
 if __name__ == "__main__":
