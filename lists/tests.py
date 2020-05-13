@@ -29,76 +29,80 @@ class HomePageTest(TestCase):
 
 class ItemModelTest(TestCase):
 
-    def test_saving_and_retrieving_items(self):
+    def test_save_item(self):
         """
-        Test creating and saving the Item model into the database
+        Test saving an item to a test list
         """
 
-        # Create 2 Item objects
-        models.Item.objects.create(text="First List Item")
-        models.Item.objects.create(text="Second List Item")
+        # Create a sample list
+        item_list = models.ItemList(
+            url_name="sample-list",
+            name="Sample List"
+        )
+        item_list.save()
 
-        # Get all Item objects from database
-        saved_items = models.Item.objects.all()
+        # Create 2 items in sample list
+        models.Item.objects.create(text="Item 1", item_list=item_list)
+        models.Item.objects.create(text="Item 2", item_list=item_list)
 
-        # Test how many items are saved in database
-        self.assertEqual(saved_items.count(), 2)
-
-        # Grab each Item object
-        first_item_object = saved_items[0]
-        second_item_object = saved_items[1]
-
-        # Test the 'text' field of each item
-        self.assertEqual(first_item_object.text, "First List Item")
-        self.assertEqual(second_item_object.text, "Second List Item")
+        # Test objects inside DB
+        self.assertEqual(models.Item.objects.count(), 2)
+        self.assertEqual(models.Item.objects.all()[0].text, "Item 1")
+        self.assertEqual(models.Item.objects.all()[1].text, "Item 2")
 
 
 class NewListTest(TestCase):
 
-    def test_save_a_POST_request(self):
+    def test_create_item_list(self):
         """
         Test that making a POST request will save Item object in database
         """
 
         # Make a POST request to server
-        response = self.client.post("/", data={
-            "item-text": "New list item"
+        response = self.client.post("/lists/new/", data={
+            "item-list-name": "Sample List"
         })
 
         # Test the amount of objects in DB is 1
-        self.assertEqual(models.Item.objects.count(), 1)
+        self.assertEqual(models.ItemList.objects.count(), 1)
 
         # Test if the (first) item is the item we submitted
-        first_item = models.Item.objects.first()
-        self.assertEqual(first_item.text, "New list item")
+        first_item_list = models.ItemList.objects.first()
+        self.assertEqual(first_item_list.name, "Sample List")
 
-    def test_redirects_after_POST(self):
+    def test_redirects_after_item_list_creation(self):
         """
         Test that we redirect to view-list page after POST request
         """
 
         # Make a POST request to server
-        response = self.client.post("/", data={
-            "item-text": "New list item"
+        response = self.client.post("/lists/new/", data={
+            "item-list-name": "Sample List"
         })
 
         # Test the status code and URL location from HTML content
-        self.assertRedirects(response, "/lists/new-list/") # Detect URL redirect
+        self.assertRedirects(response, "/lists/sample-list/") # Detect URL redirect
 
 
 class ListViewTest(TestCase):
-
     def test_list_displays_all_items(self):
         """
         Make sure that list page displays all items
         """
 
-        # Create 2 new items
-        models.Item.objects.create(text="Item 1")
-        models.Item.objects.create(text="Item 2")
+        # Create a sample list
+        item_list = models.ItemList(
+            url_name="sample-list",
+            name="Sample List"
+        )
+        item_list.save()
 
+        # Create 2 items in sample list
+        models.Item.objects.create(text="Item 1", item_list=item_list)
+        models.Item.objects.create(text="Item 2", item_list=item_list)
+    
         # Get new-list page
-        response = self.client.get("/lists/new-list/")
+        response = self.client.get("/lists/sample-list/")
 
         # Check if page content includes 2 newly-created items
         self.assertContains(response, "Item 1")
