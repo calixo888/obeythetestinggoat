@@ -4,5 +4,6 @@ from lists import views
 urlpatterns = [
     url("^$", views.index, name="index"),
     url("^lists/new/$", views.new_list, name="new_list"),
-    url("^lists/new-list/$", views.view_list, name="view_list"),
+    url("^lists/add-item/$", views.add_item, name="add_item"),
+    url("^lists/(.+)/$", views.view_list, name="view_list"),
 ]
