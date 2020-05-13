@@ -9,7 +9,7 @@ class NewVisitorCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
-        self.browser.implicitly_wait(5)
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -29,29 +29,6 @@ class NewVisitorCase(LiveServerTestCase):
 
         # Check that new list at unique URL is generated
         self.assertRegex(self.browser.current_url, "/lists/sample-list/")
-
-    def wait_for_item_rendered_in_table(self, item_text):
-        """
-        Implicit wait function until item is rendered into table
-        """
-
-        start_time = time.time()
-        while True:
-            try:
-                # Making sure table is populated with new to-do item
-                to_do_item_table = self.browser.find_element_by_id("to-do-item-table")
-                to_do_item_table_rows = to_do_item_table.find_elements_by_tag_name("tr")
-                self.assertTrue(
-                    any(row.text == item_text for row in to_do_item_table_rows)
-                )
-
-                return # End this function
-
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > 10:
-                    raise e
-
-                time.sleep(0.5)
 
 
 if __name__ == "__main__":
