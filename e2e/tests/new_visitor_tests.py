@@ -1,26 +1,6 @@
-from django.test import LiveServerTestCase
-from selenium import webdriver
+from .base import E2ETest
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
-import unittest
 import time
-import os
-
-class E2ETest(LiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
-
-        staging_server = os.environ.get("STAGING_SERVER")
-        if staging_server:
-            self.live_server_url = 'http://' + staging_server
-
-        self.browser.set_window_size(1500, 1000)
-        self.browser.implicitly_wait(3)
-
-    def tearDown(self):
-        self.browser.quit()
-
 
 class NewVisitorCase(E2ETest):
 
@@ -63,7 +43,3 @@ class NewVisitorCase(E2ETest):
             self.assertTrue(
                 any(list_item.text == item for list_item in to_do_items_table.find_elements_by_tag_name("li"))
             )
-
-
-if __name__ == "__main__":
-    unittest.main(warnings="ignore")
