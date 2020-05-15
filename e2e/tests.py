@@ -9,6 +9,7 @@ class NewVisitorCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
+        self.browser.set_window_size(1500, 1000)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -45,10 +46,10 @@ class NewVisitorCase(LiveServerTestCase):
             to_do_item_input.send_keys(Keys.ENTER)
 
         # Test that all 3 items are in table
-        to_do_items_table = self.browser.find_element_by_id("to-do-item-table")
+        to_do_items_table = self.browser.find_element_by_id("to-do-item-list")
         for item in items:
             self.assertTrue(
-                any(row.text == item for row in to_do_items_table.find_elements_by_tag_name("tr"))
+                any(list_item.text == item for list_item in to_do_items_table.find_elements_by_tag_name("li"))
             )
 
 
