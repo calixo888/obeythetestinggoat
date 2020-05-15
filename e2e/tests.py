@@ -6,7 +6,7 @@ import unittest
 import time
 import os
 
-class NewVisitorCase(LiveServerTestCase):
+class E2ETest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
@@ -20,6 +20,9 @@ class NewVisitorCase(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+
+class NewVisitorCase(E2ETest):
 
     def test_create_list_and_add_items(self):
         """
@@ -44,6 +47,9 @@ class NewVisitorCase(LiveServerTestCase):
         # ADD 3 ITEMS
         items = ["Item 1", "Item 2", "Item 3"]
         for item in items:
+            # Wait for page to render
+            time.sleep(.5)
+
             # Grab input element
             to_do_item_input = self.browser.find_element_by_id("to-do-item-input")
 
