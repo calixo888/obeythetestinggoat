@@ -4,11 +4,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 import unittest
 import time
+import os
 
 class NewVisitorCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
+
+        staging_server = os.environ.get("STAGING_SERVER")
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
+
         self.browser.set_window_size(1500, 1000)
         self.browser.implicitly_wait(3)
 
