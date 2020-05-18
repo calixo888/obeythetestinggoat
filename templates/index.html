@@ -9,7 +9,7 @@
     <form action="/lists/new/" method="post">
       {% csrf_token %}
 
-      <input placeholder="Create a new list" name="item-list-name" type="text" id="item-list-input">
+      <input placeholder="Create a new list" name="item-list-name" type="text" id="item-list-input" required>
 
       <input type="submit" value="Create a list!">
     </form>

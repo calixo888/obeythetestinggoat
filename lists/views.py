@@ -12,13 +12,21 @@ def index(request):
 def new_list(request):
     """
     Create a new ItemList, then redirect to its unique URL
+    If provided ItemList name is empty, return HttpResponse error
     """
 
     if request.method == "POST":
         item_list_name = request.POST.get("item-list-name")
-        url_list_name = item_list_name.lower().replace(" ", "-")
-        models.ItemList.objects.create(url_name=url_list_name, name=item_list_name)
-        return HttpResponseRedirect(f"/lists/{url_list_name}/")
+
+        # Check if item_list_name is empty
+        if item_list_name:
+            url_list_name = item_list_name.lower().replace(" ", "-")
+            models.ItemList.objects.create(url_name=url_list_name, name=item_list_name)
+            return HttpResponseRedirect(f"/lists/{url_list_name}/")
+
+        else:
+            return HttpResponse("No list name provided.", status=500)
+
 
 def add_item(request):
     """
@@ -26,10 +34,17 @@ def add_item(request):
     """
 
     if request.method == "POST":
-        models.Item.objects.create(
-            text = request.POST.get("item"),
-            item_list = models.ItemList.objects.get(name=request.POST.get("item-list-name"))
-        )
+        item_text = request.POST.get("item")
+
+        # Check if item_text is empty
+        if item_text:
+            models.Item.objects.create(
+                text = item_text,
+                item_list = models.ItemList.objects.get(name=request.POST.get("item-list-name"))
+            )
+
+        else:
+            return HttpResponse("No list item text provided.", status=500)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
