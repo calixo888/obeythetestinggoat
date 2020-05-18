@@ -8,11 +8,15 @@ EXPOSE 8000
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# COPY ALL FILES
-COPY . .
+# COPY DEPENDENCIES FILE
+COPY requirements.txt .
 
 # INSTALL DEPENDENCIES
 RUN pip install -r requirements.txt
+
+# COPY ALL FILES
+# COPY . .
+
 RUN python3 manage.py collectstatic
 RUN python3 manage.py migrate
 
