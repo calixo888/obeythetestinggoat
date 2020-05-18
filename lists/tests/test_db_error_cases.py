@@ -19,6 +19,7 @@ class DBErrorCasesTest(TestCase):
         # Test if DB error is raised
         with self.assertRaises(ValidationError):
             empty_list.save()
+            empty_list.full_clean()
 
 
     def test_create_empty_item_object(self):
@@ -37,3 +38,7 @@ class DBErrorCasesTest(TestCase):
         # Test if DB error is raised
         with self.assertRaises(ValidationError):
             empty_item.save()
+            empty_item.full_clean()
+
+
+    
