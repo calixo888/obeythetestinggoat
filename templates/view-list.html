@@ -13,9 +13,18 @@
 
       <input type="hidden" name="item-list-name" value="{{ item_list.name }}">
 
-      <input placeholder="Create a to-do item" name="item" type="text" id="to-do-item-input" required>
+      <!-- <input placeholder="Create a to-do item" name="item" type="text" id="to-do-item-input" required> -->
+      {{ item_form.text }}
 
       <input type="submit" value="Create a to-do item">
+
+      {% if item_form.text.errors %}
+        <ol>
+          {% for error in item_form.text.errors %}
+              <li><strong>{{ error|escape }}</strong></li>
+          {% endfor %}
+        </ol>
+      {% endif %}
     </form>
 
     {% if items %}

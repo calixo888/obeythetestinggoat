@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from . import models
+from . import models, forms
 
 def index(request):
     """
@@ -34,19 +34,22 @@ def add_item(request):
     """
 
     if request.method == "POST":
-        item_text = request.POST.get("item")
+        item_list_name = request.POST.get("item-list-name")
+        item_list = models.ItemList.objects.get(name=item_list_name)
+
+        item_form = forms.ItemForm(request.POST)
 
         # Check if item_text is empty
-        if item_text:
+        if item_form.is_valid():
             models.Item.objects.create(
-                text = item_text,
-                item_list = models.ItemList.objects.get(name=request.POST.get("item-list-name"))
+                text=item_form.cleaned_data["text"],
+                item_list=item_list
             )
 
         else:
-            return HttpResponse("No list item text provided.", status=500)
+            return HttpResponseRedirect(f"/lists/{item_list.url_name}")
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(f"/lists/{item_list.url_name}")
 
 def view_list(request, list_url_name):
     """
@@ -54,8 +57,10 @@ def view_list(request, list_url_name):
     """
 
     item_list = models.ItemList.objects.get(url_name=list_url_name)
+    item_form = forms.ItemForm()
 
     return render(request, "view-list.html", context={
         "item_list": item_list,
-        "items": item_list.items.all()
+        "items": item_list.items.all(),
+        "item_form": item_form
     })

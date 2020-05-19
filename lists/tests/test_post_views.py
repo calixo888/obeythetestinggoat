@@ -20,6 +20,7 @@ class POSTViewTest(TestCase):
         self.assertEquals(sample_list.name, "Sample List")
         self.assertEquals(sample_list.url_name, "sample-list")
 
+
     def test_add_item(self):
         """
         Test new item creation when POST request made to '/lists/add-item/'
@@ -32,7 +33,7 @@ class POSTViewTest(TestCase):
 
         # Make POST request to '/lists/add-item/'
         response = self.client.post("/lists/add-item/", data={
-            "item": "Sample List Item",
+            "text": "Sample List Item",
             "item-list-name": "Sample List"
         })
 
