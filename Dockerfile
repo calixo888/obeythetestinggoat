@@ -15,7 +15,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # COPY ALL FILES
-# COPY . .
+COPY . .
 
 RUN python3 manage.py collectstatic
 RUN python3 manage.py migrate
