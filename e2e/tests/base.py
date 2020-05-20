@@ -1,12 +1,14 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 import unittest
 import os
 
 class E2ETest(LiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
+        # self.browser = webdriver.Chrome(executable_path='../obeythetestinggoat/chromedriver')
+        self.browser = webdriver.Chrome(ChromeDriverManager().install())
 
         staging_server = os.environ.get("STAGING_SERVER")
         if staging_server:
