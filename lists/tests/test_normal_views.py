@@ -14,6 +14,17 @@ class NormalViewTest(TestCase):
         self.assertTemplateUsed(response, "index.html")
 
 
+    def test_create_list_render(self):
+        """
+        Make sure URL '/create-list/' renders index.html
+        """
+        # GET request to '/create-list/'
+        response = self.client.get("/create-list/")
+
+        # Test template being rendered
+        self.assertTemplateUsed(response, "create-list.html")
+
+
     def test_view_list_render(self):
         """
         Make sure URL '/lists/:id/' renders index.html

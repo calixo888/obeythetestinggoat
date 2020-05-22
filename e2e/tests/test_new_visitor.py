@@ -11,6 +11,12 @@ class NewVisitorCase(E2ETest):
         # Start the browser
         self.browser.get(self.live_server_url)
 
+        # Go the Create List
+        create_list_link = self.browser.find_element_by_id("nav-item-create-list")
+        create_list_link.click()
+
+        time.sleep(.5)
+
         # ADD ITEM
         # Visitor is invited to create to-do item immediately
         item_list_input = self.browser.find_element_by_id("item-list-input")

@@ -9,6 +9,15 @@ def index(request):
 
     return render(request, "index.html")
 
+
+def create_list(request):
+    """
+    Render the Create List page
+    """
+
+    return render(request, "create-list.html")
+
+
 def new_list(request):
     """
     Create a new ItemList, then redirect to its unique URL
